@@ -15,7 +15,12 @@
       <label for="firstName">First Name</label>
       <input type="text" id="firstName" v-model="firstName" />
       <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" :value="lastName" @input="updateLastName" />
+      <input
+        type="text"
+        id="lastName"
+        :value="lastName"
+        @input="updateLastName('last name change event!', $event)"
+      />
 
       <button v-on:click="increment">Increment</button>
       <button @click="age--">Decrement</button>
