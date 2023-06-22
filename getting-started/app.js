@@ -10,18 +10,28 @@ const vm = Vue.createApp({
     };
   },
   methods: {
+    // 다른 data가 변경될 때도 fullName 메소드가 호출됨
     fullName() {
+      console.log('Full name method was called!');
       return `${this.firstName} ${this.middleName} ${this.lastName.toUpperCase()}`;
     },
     increment() {
       this.age++;
     },
     updateLastName(msg, event) {
-      console.log(msg);
+      // console.log(msg);
       this.lastName = event.target.value;
     },
     updateMiddleName(event) {
       this.middleName = event.target.value;
+    },
+  },
+  // https://vuejs.org/guide/essentials/computed.html#basic-example
+  computed: {
+    // fullName 내부에서 사용되는 data가 변경되는 경우에만 호출됨
+    fullName() {
+      console.log('Full name computed property was called!');
+      return `${this.firstName} ${this.middleName} ${this.lastName.toUpperCase()}`;
     },
   },
 }).mount('#app1');

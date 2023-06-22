@@ -6,7 +6,7 @@
   </head>
   <body>
     <div id="app1" v-cloak>
-      <p>{{ `${firstName} ${lastName.toUpperCase()}` }} {{ fullName() }}</p>
+      <p>{{ `${firstName} ${lastName.toUpperCase()}` }} {{ fullName }}</p>
       <p><a :href="url" target="_blank">Google</a></p>
       <!-- use raw html very carefully. It can be manipulated by malicious attack - like cross site scripting -->
       <p v-html="raw_url"></p>
