@@ -10,11 +10,15 @@
       <p><a :href="url" target="_blank">Google</a></p>
       <!-- use raw html very carefully. It can be manipulated by malicious attack - like cross site scripting -->
       <p v-html="raw_url"></p>
+      <p>{{ age }}</p>
       <hr />
       <label for="firstName">First Name</label>
       <input type="text" id="firstName" v-model="firstName" />
       <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" v-model="lastName" />
+      <input type="text" id="lastName" :value="lastName" @input="updateLastName" />
+
+      <button v-on:click="increment">Increment</button>
+      <button @click="age--">Decrement</button>
     </div>
     <!-- <div id="app2">{{ firstName }} {{ lastName }}</div> -->
 
