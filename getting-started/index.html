@@ -5,7 +5,14 @@
     <link rel="stylesheet" type="text/css" href="main.css" />
   </head>
   <body>
-    <div id="app1" v-cloak>{{ `${firstName} ${lastName.toUpperCase()}` }} {{ fullName() }}</div>
+    <div id="app1" v-cloak>
+      <p>{{ `${firstName} ${lastName.toUpperCase()}` }} {{ fullName() }}</p>
+      <hr />
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" v-model="firstName" />
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" v-model="lastName" />
+    </div>
     <!-- <div id="app2">{{ firstName }} {{ lastName }}</div> -->
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
