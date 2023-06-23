@@ -48,3 +48,16 @@ let vm2 = Vue.createApp({
     return Vue.h('h1', this.message);
   },
 }).mount('#app2');
+
+let vm3 = Vue.createApp({});
+
+vm3.component('hello', {
+  template: `<h1>{{message}}</h1>`,
+  data() {
+    return {
+      message: 'hello I am component!',
+    };
+  },
+});
+
+vm3.mount('#app3');
