@@ -29,6 +29,7 @@ let vm = Vue.createApp({
   unmounted() {
     console.log('unmounted() fn called!', this.$el);
   },
+  template: `{{ message }}`,
 });
 
 vm.mount('#app');
@@ -36,3 +37,14 @@ vm.mount('#app');
 // setTimeout(() => {
 //   vm.mount('#app');
 // }, 3000);
+
+let vm2 = Vue.createApp({
+  data() {
+    return {
+      message: 'Hello world!',
+    };
+  },
+  render() {
+    return Vue.h('h1', this.message);
+  },
+}).mount('#app2');
