@@ -23,6 +23,8 @@
   <keep-alive>
     <component :is="componentName"></component>
   </keep-alive>
+
+  <Animating />
 </template>
 
 <script>
@@ -31,6 +33,7 @@ import User from '@/components/User.vue';
 import AppForm from '@/components/Form.vue';
 import Home from '@/components/Home.vue';
 import About from '@/components/About.vue';
+import Animating from '@/components/Animating.vue';
 
 export default {
   name: 'MyApp',
@@ -40,6 +43,7 @@ export default {
     AppForm,
     Home,
     About,
+    Animating,
   },
   data() {
     return {
