@@ -12,6 +12,20 @@
   <transition name="zoom" appear>
     <h2>Zoom amimate at first</h2>
   </transition>
+
+  <transition
+    @before-enter="beforeEnter"
+    @enter="enter"
+    @after-enter="afterEnter"
+    @before-leave="beforeLeave"
+    @leave="leave"
+    @after-leave="afterLeave"
+    @enter-cancelled="onEnterCancelled"
+    @leave-cancelled="onLeaveCancelled"
+    :css="false"
+  >
+    <h2 v-if="flag">animate with javascript</h2>
+  </transition>
 </template>
 
 <script>
@@ -20,6 +34,56 @@ export default {
     return {
       flag: false,
     };
+  },
+  methods: {
+    beforeEnter(el) {
+      console.log('before enter', el);
+    },
+    enter(el, done) {
+      console.log('enter', el);
+      const animation = el.animate(
+        [
+          {
+            transform: 'scale3d(0, 0, 0)',
+          },
+          {},
+        ],
+        { duration: 1000 }
+      );
+      animation.onFinish = () => {
+        done();
+      };
+    },
+    afterEnter(el) {
+      console.log('after enter', el);
+    },
+    beforeLeave(el) {
+      console.log('before leave', el);
+    },
+    leave(el, done) {
+      console.log('leave', el);
+      const animation = el.animate(
+        [
+          {},
+          {
+            transform: 'scale3d(0, 0, 0)',
+          },
+        ],
+        { duration: 1000 }
+      );
+      animation.onFinish = () => {
+        done();
+      };
+    },
+    afterLeave(el) {
+      console.log('after leave', el);
+    },
+    onEnterCancelled(el) {
+      console.log('onEnterCancelled', el);
+    },
+    onLeaveCancelled(el) {
+      console.log('onLeaveCancelled', el);
+    },
   },
 };
 </script>
