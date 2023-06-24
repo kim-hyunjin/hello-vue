@@ -13,7 +13,7 @@
     <h2>Zoom amimate at first</h2>
   </transition>
 
-  <transition
+  <!-- <transition
     @before-enter="beforeEnter"
     @enter="enter"
     @after-enter="afterEnter"
@@ -25,6 +25,21 @@
     :css="false"
   >
     <h2 v-if="flag">animate with javascript</h2>
+  </transition> -->
+
+  <transition
+    @before-enter="beforeEnter"
+    @enter="enter2"
+    @after-enter="afterEnter"
+    @before-leave="beforeLeave"
+    @leave="leave2"
+    @after-leave="afterLeave"
+    @enter-cancelled="onEnterCancelled"
+    @leave-cancelled="onLeaveCancelled"
+    :css="true"
+    name="fade"
+  >
+    <h2 v-if="flag">leave animation to css and check event with js</h2>
   </transition>
 </template>
 
@@ -54,6 +69,9 @@ export default {
         done();
       };
     },
+    enter2(el) {
+      console.log('enter2', el);
+    },
     afterEnter(el) {
       console.log('after enter', el);
     },
@@ -74,6 +92,9 @@ export default {
       animation.onFinish = () => {
         done();
       };
+    },
+    leave2(el) {
+      console.log('leave2', el);
     },
     afterLeave(el) {
       console.log('after leave', el);
