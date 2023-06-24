@@ -41,6 +41,15 @@
   >
     <h2 v-if="flag">leave animation to css and check event with js</h2>
   </transition>
+
+  <button @click="addItem">Add</button>
+  <ul>
+    <transition-group name="fade">
+      <li v-for="(number, index) in numbers" :key="number" @click="removeItem(index)">
+        {{ number }}
+      </li>
+    </transition-group>
+  </ul>
 </template>
 
 <script>
@@ -48,6 +57,7 @@ export default {
   data() {
     return {
       flag: false,
+      numbers: [1, 2, 3, 4, 5],
     };
   },
   methods: {
@@ -105,6 +115,14 @@ export default {
     onLeaveCancelled(el) {
       console.log('onLeaveCancelled', el);
     },
+    addItem() {
+      const num = Math.floor(Math.random() * 100 + 1);
+      const index = Math.floor(Math.random() * this.numbers.length);
+      this.numbers.splice(index, 0, num);
+    },
+    removeItem(index) {
+      this.numbers.splice(index, 1);
+    },
   },
 };
 </script>
@@ -122,6 +140,14 @@ export default {
 .fade-leave-to {
   transition: all 1s linear;
   opacity: 0;
+}
+
+.fade-move {
+  transition: all 1s linear;
+}
+
+.fade-leave-active {
+  position: absolute;
 }
 
 h2 {
@@ -153,5 +179,10 @@ h2 {
   to {
     transform: scale(0, 0);
   }
+}
+
+li {
+  font-size: 22px;
+  cursor: pointer;
 }
 </style>
