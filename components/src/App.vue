@@ -15,12 +15,22 @@
     </template>
     <p>this is goes to default slot</p>
   </app-form>
+  <select v-model="componentName">
+    <option value="Home">Home</option>
+    <option value="About">About</option>
+  </select>
+
+  <keep-alive>
+    <component :is="componentName"></component>
+  </keep-alive>
 </template>
 
 <script>
 import Greeting from '@/components/Greeting.vue';
 import User from '@/components/User.vue';
 import AppForm from '@/components/Form.vue';
+import Home from '@/components/Home.vue';
+import About from '@/components/About.vue';
 
 export default {
   name: 'MyApp',
@@ -28,11 +38,14 @@ export default {
     Greeting,
     User,
     AppForm,
+    Home,
+    About,
   },
   data() {
     return {
       age: 20,
       help: 'this is some help text.',
+      componentName: 'Home',
     };
   },
   methods: {
