@@ -1,6 +1,7 @@
 <template>
   <div>The User is {{ age }} years old</div>
   <button @click="onClickAge">Updage Age</button>
+  <button @click="ageChangeFn(3)">Updage Age with callback</button>
   <p>{{ ageDoubled }}</p>
 </template>
 
@@ -16,6 +17,7 @@ export default {
         return value < 130;
       },
     },
+    ageChangeFn: Function,
   },
   emits: ['age-change'],
   computed: {
