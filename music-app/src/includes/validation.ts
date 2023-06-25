@@ -56,7 +56,11 @@ export default {
           ? messages[ctx.rule?.name as keyof typeof messages]
           : `The field ${ctx.field} is invalid.`
         return message
-      }
+      },
+      validateOnBlur: true,
+      validateOnChange: true,
+      validateOnInput: false,
+      validateOnModelUpdate: true
     })
   }
 } as Plugin
