@@ -163,15 +163,17 @@
             </div>
             <!-- TOS -->
             <div class="mb-3 pl-6">
-              <vee-field
-                name="tos"
-                value="1"
-                type="checkbox"
-                class="w-4 h-4 float-left -ml-6 mt-1 rounded"
-              />
-              <label class="inline-block">Accept terms of service</label>
+              <div>
+                <vee-field
+                  name="tos"
+                  value="1"
+                  type="checkbox"
+                  class="w-4 h-4 float-left -ml-6 mt-1 rounded"
+                />
+                <label class="inline-block">Accept terms of service</label>
+              </div>
+              <ErrorMessage class="text-red-600" name="tos" />
             </div>
-            <ErrorMessage class="text-red-600" name="tos" />
             <button
               type="submit"
               class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
@@ -200,9 +202,9 @@ export default defineComponent({
         email: 'required|email',
         age: 'required|min_value:18|max_value:100',
         password: 'required|min:9|max:100|not_one_of:password',
-        confirmPassword: 'confirmed:@password',
-        country: 'required|not_one_of:Antarctica',
-        tos: 'required'
+        confirmPassword: 'password_mismatch:@password',
+        country: 'required|country_excluded:Antarctica',
+        tos: 'tos'
       },
       defaultValues: {
         country: 'USA'
