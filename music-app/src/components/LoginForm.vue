@@ -41,7 +41,9 @@
 </template>
 
 <script lang="ts">
+import { mapActions } from 'pinia'
 import { defineComponent } from 'vue'
+import useUserStore from '@/stores/user'
 
 export default defineComponent({
   name: 'LoginForm',
@@ -58,16 +60,26 @@ export default defineComponent({
     }
   },
   methods: {
-    login(values: any) {
+    ...mapActions(useUserStore, ['authenticate']),
+    async login(values: any) {
       console.log(values)
       this.login_show_alert = true
       this.login_in_submission = true
       this.login_alert_variant = 'bg-blue-500'
       this.login_alert_msg = 'Please wait! We are logging you in.'
-      setTimeout(() => {
-        this.login_alert_variant = 'bg-green-500'
-        this.login_alert_msg = 'Success! You are now logged in.'
-      }, 1000)
+
+      try {
+        await this.authenticate(values)
+      } catch (error) {
+        this.login_in_submission = false
+        this.login_alert_variant = 'bg-red-500'
+        this.login_alert_msg = 'Invalid login details.'
+        return
+      }
+
+      this.login_alert_variant = 'bg-green-500'
+      this.login_alert_msg = 'Success! You are now logged in.'
+      window.location.reload()
     }
   }
 })
