@@ -1,6 +1,6 @@
 <template>
   <!-- Auth Modal -->
-  <div class="fixed z-10 inset-0 overflow-y-auto" id="modal" :class="hiddenClass">
+  <div class="fixed z-10 inset-0 overflow-y-auto" id="modal" :class="modalStore.hiddenClass">
     <div
       class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
     >
@@ -20,7 +20,7 @@
           <div class="flex justify-between items-center pb-4">
             <p class="text-2xl font-bold">Your Account</p>
             <!-- Modal Close Button -->
-            <div class="modal-close cursor-pointer z-50" @click="toggleAuthModal">
+            <div class="modal-close cursor-pointer z-50" @click="modalStore.toggle">
               <i class="fas fa-times"></i>
             </div>
           </div>
@@ -61,33 +61,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import useModalStore from '@/stores/modal'
-import { mapState, mapActions } from 'pinia'
 import LoginForm from '@/components/LoginForm.vue'
 import RegisterForm from '@/components/RegisterForm.vue'
+import { ref } from 'vue'
 
-export default defineComponent({
-  name: 'AppAuth',
-  components: {
-    LoginForm,
-    RegisterForm
-  },
-  data() {
-    return {
-      tab: 'login' as 'login' | 'register'
-    }
-  },
-  computed: {
-    ...mapState(useModalStore, ['hiddenClass'])
-  },
-  methods: {
-    ...mapActions(useModalStore, {
-      toggleAuthModal: 'toggle'
-    })
-  }
-})
+const tab = ref<'login' | 'register'>('login')
+const modalStore = useModalStore()
 </script>
 
 <style scoped></style>
