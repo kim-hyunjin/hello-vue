@@ -16,8 +16,12 @@ const routes: Readonly<RouteRecordRaw[]> = [
   },
   {
     name: 'manage',
-    path: '/manage',
+    path: '/manage-music',
     component: ManageView
+  },
+  {
+    path: '/manage',
+    redirect: { name: 'manage' }
   }
 ]
 const router = createRouter({
