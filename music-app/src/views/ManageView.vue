@@ -136,6 +136,21 @@
   </section>
 </template>
 
-<script setup lang="ts"></script>
+<script lang="ts">
+import useUserStore from '@/stores/user'
+
+export default {
+  name: 'ManageView',
+  beforeRouteEnter(to, from, next) {
+    const userStore = useUserStore()
+
+    if (userStore.userLoggedIn) {
+      next()
+    } else {
+      next({ name: 'home' })
+    }
+  }
+}
+</script>
 
 <style scoped></style>

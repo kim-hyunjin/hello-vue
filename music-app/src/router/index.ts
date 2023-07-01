@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteRecordRaw,
+  type NavigationGuardWithThis
+} from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import ManageView from '@/views/ManageView.vue'
@@ -19,6 +24,10 @@ const routes: Readonly<RouteRecordRaw[]> = [
     name: 'manage',
     path: '/manage-music',
     component: ManageView
+    // beforeEnter: (to, from, next) => {
+    //   console.log('manage route guard')
+    //   next()
+    // }
   },
   {
     path: '/manage',
@@ -34,5 +43,12 @@ const router = createRouter({
   routes,
   linkExactActiveClass: 'text-yellow-500'
 })
+
+const globalGuard: NavigationGuardWithThis<undefined> = (to, from, next) => {
+  console.log({ to, from })
+  next()
+}
+
+router.beforeEach(globalGuard)
 
 export default router
