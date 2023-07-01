@@ -6,6 +6,7 @@ import ManageView from '@/views/ManageView.vue'
 const routes: Readonly<RouteRecordRaw[]> = [
   {
     name: 'home',
+    alias: '/music',
     path: '/',
     component: HomeView
   },
@@ -21,7 +22,7 @@ const routes: Readonly<RouteRecordRaw[]> = [
   },
   {
     path: '/manage',
-    redirect: { name: 'manage' }
+    redirect: { name: 'manage' } // redirect is better for SEO
   },
   {
     path: '/:catchAll(.*)*',
