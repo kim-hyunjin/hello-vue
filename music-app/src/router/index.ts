@@ -7,6 +7,7 @@ import {
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import ManageView from '@/views/ManageView.vue'
+import useUserStore from '@/stores/user'
 
 const routes: Readonly<RouteRecordRaw[]> = [
   {
@@ -23,7 +24,10 @@ const routes: Readonly<RouteRecordRaw[]> = [
   {
     name: 'manage',
     path: '/manage-music',
-    component: ManageView
+    component: ManageView,
+    meta: {
+      requiresAuth: true
+    }
     // beforeEnter: (to, from, next) => {
     //   console.log('manage route guard')
     //   next()
@@ -45,8 +49,18 @@ const router = createRouter({
 })
 
 const globalGuard: NavigationGuardWithThis<undefined> = (to, from, next) => {
-  console.log({ to, from })
-  next()
+  if (!to.meta.requiresAuth) {
+    next()
+    return
+  }
+
+  const store = useUserStore()
+
+  if (store.userLoggedIn) {
+    next()
+  } else {
+    next({ name: 'home' })
+  }
 }
 
 router.beforeEach(globalGuard)
