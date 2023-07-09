@@ -46,10 +46,17 @@
 <script lang="ts">
 import { storage, auth, songsCollection } from '@/includes/firebase'
 import { ref, uploadBytesResumable, type UploadTask, getDownloadURL } from 'firebase/storage'
-import { setDoc, doc } from 'firebase/firestore'
-import { type Song } from '@/models/song'
+import { addDoc } from 'firebase/firestore'
+import { type Song, type SongWithID } from '@/models/song'
+import type { PropType } from 'vue'
 export default {
   name: 'AppUpload',
+  props: {
+    addSong: {
+      type: Function as PropType<(newSong: SongWithID) => void>,
+      required: true
+    }
+  },
   data() {
     return {
       is_dragover: false,
@@ -117,7 +124,8 @@ export default {
               genre: '',
               comment_count: 0
             }
-            setDoc(doc(songsCollection), song)
+            const songRef = await addDoc(songsCollection, song)
+            this.$props.addSong({ ...song, doc_id: songRef.id })
 
             this.uploads[itemIndex].variant = 'bg-green-400'
             this.uploads[itemIndex].text_class = 'text-green-400'

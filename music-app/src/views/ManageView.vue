@@ -3,7 +3,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <app-upload ref="uploadRef"></app-upload>
+        <app-upload ref="uploadRef" :addSong="addSong"></app-upload>
       </div>
       <div class="col-span-2">
         <div class="bg-white rounded border border-gray-200 relative flex flex-col">
@@ -18,6 +18,7 @@
               :key="song.doc_id"
               :song="song"
               :updateSong="updateSong"
+              :removeSong="removeSong"
             />
           </div>
         </div>
@@ -63,6 +64,15 @@ export default {
       if (index === -1) return
 
       this.songs[index] = updatedSong
+    },
+    removeSong(doc_id: string) {
+      const index = this.songs.findIndex((e) => e.doc_id === doc_id)
+      if (index === -1) return
+
+      this.songs.splice(index, 1)
+    },
+    addSong(newSong: SongWithID) {
+      this.songs.push(newSong)
     }
   }
   // beforeRouteLeave(to, from, next) {

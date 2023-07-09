@@ -2,7 +2,10 @@
   <div class="border border-gray-200 p-3 mb-4 rounded">
     <div v-show="!showForm">
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
-      <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right">
+      <button
+        class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        @click.prevent="deleteSong"
+      >
         <i class="fa fa-times"></i>
       </button>
       <button
@@ -58,15 +61,17 @@
 </template>
 
 <script setup lang="ts">
-import { songsCollection } from '@/includes/firebase'
+import { songsCollection, storage } from '@/includes/firebase'
 import type { SongWithID } from '@/models/song'
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore'
+import { ref as storageRef, deleteObject } from 'firebase/storage'
 import { ErrorMessage } from 'vee-validate'
 import { reactive, ref } from 'vue'
 
 const props = defineProps<{
   song: SongWithID
   updateSong: (updated: SongWithID) => void
+  removeSong: (doc_id: string) => void
 }>()
 
 const showForm = ref(false)
@@ -98,6 +103,12 @@ async function edit(values: any) {
     alertVariant.value = 'bg-red-500'
     alertMessage.value = 'Something went wrong...'
   }
+}
+
+async function deleteSong() {
+  await deleteObject(storageRef(storage, `songs/${props.song.original_name}`))
+  await deleteDoc(doc(songsCollection, props.song.doc_id))
+  props.removeSong(props.song.doc_id)
 }
 </script>
 
