@@ -27,6 +27,7 @@
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
+            @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
@@ -37,6 +38,7 @@
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Genre"
+            @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="genre" />
         </div>
@@ -72,6 +74,7 @@ const props = defineProps<{
   song: SongWithID
   updateSong: (updated: SongWithID) => void
   removeSong: (doc_id: string) => void
+  updateUnsavedFlag: (flag: boolean) => void
 }>()
 
 const showForm = ref(false)
@@ -94,6 +97,7 @@ async function edit(values: any) {
     await updateDoc(doc(songsCollection, props.song.doc_id), values)
 
     props.updateSong({ ...props.song, ...values })
+    props.updateUnsavedFlag(false)
 
     inSubmission.value = false
     alertVariant.value = 'bg-green-500'
