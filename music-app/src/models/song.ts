@@ -1,4 +1,4 @@
-export type Song = {
+export interface Song {
   uid: string
   url: string
   display_name: string
@@ -6,4 +6,8 @@ export type Song = {
   modified_name: string
   genre: string
   comment_count: number
+}
+
+export interface SongWithID extends Song {
+  doc_id: string
 }

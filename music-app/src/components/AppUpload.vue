@@ -48,7 +48,6 @@ import { storage, auth, songsCollection } from '@/includes/firebase'
 import { ref, uploadBytesResumable, type UploadTask, getDownloadURL } from 'firebase/storage'
 import { setDoc, doc } from 'firebase/firestore'
 import { type Song } from '@/models/song'
-import { Input } from 'postcss'
 export default {
   name: 'AppUpload',
   data() {
