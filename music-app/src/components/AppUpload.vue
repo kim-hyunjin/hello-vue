@@ -127,7 +127,15 @@ export default {
         )
       })
       this.is_dragover = false
+    },
+    cancelUploads() {
+      this.uploads.forEach((upload) => {
+        upload.task.cancel()
+      })
     }
+  },
+  beforeUnmount() {
+    this.cancelUploads()
   }
 }
 </script>
