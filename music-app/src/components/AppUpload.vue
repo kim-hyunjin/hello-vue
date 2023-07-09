@@ -15,10 +15,11 @@
         @dragover.prevent.stop="is_dragover = true"
         @dragenter.prevent.stop="is_dragover = true"
         @dragleave.prevent.stop="is_dragover = false"
-        @drop.prevent.stop="upload($event)"
+        @drop.prevent.stop="handleFileDrop($event)"
       >
         <h5>Drop your files here</h5>
       </div>
+      <input type="file" multiple @change="handleFileInput($event)" />
       <hr class="my-6" />
       <!-- Progess Bars -->
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
@@ -47,6 +48,7 @@ import { storage, auth, songsCollection } from '@/includes/firebase'
 import { ref, uploadBytesResumable, type UploadTask, getDownloadURL } from 'firebase/storage'
 import { setDoc, doc } from 'firebase/firestore'
 import { type Song } from '@/models/song'
+import { Input } from 'postcss'
 export default {
   name: 'AppUpload',
   data() {
@@ -63,10 +65,17 @@ export default {
     }
   },
   methods: {
-    upload(event: DragEvent) {
+    handleFileDrop(event: DragEvent) {
       if (!event.dataTransfer) return
-
       const files = [...(event.dataTransfer?.files || [])]
+      this.upload(files)
+    },
+    handleFileInput(event: Event) {
+      const input = event.target as HTMLInputElement
+      const files = [...(input.files || [])]
+      this.upload(files)
+    },
+    upload(files: File[]) {
       console.log({ files })
       files.forEach((f) => {
         if (f.type !== 'audio/mpeg') {
