@@ -43,8 +43,10 @@
 </template>
 
 <script lang="ts">
-import { storage } from '@/includes/firebase'
-import { ref, uploadBytesResumable, type UploadTask } from 'firebase/storage'
+import { storage, auth, songsCollection } from '@/includes/firebase'
+import { ref, uploadBytesResumable, type UploadTask, getDownloadURL } from 'firebase/storage'
+import { setDoc, doc } from 'firebase/firestore'
+import { type Song } from '@/models/song'
 export default {
   name: 'AppUpload',
   data() {
@@ -94,7 +96,21 @@ export default {
             this.uploads[itemIndex].text_class = 'text-red-400'
             this.uploads[itemIndex].icon = 'fas fa-times'
           },
-          () => {
+          async () => {
+            if (!auth.currentUser) return
+
+            const url = await getDownloadURL(task.snapshot.ref)
+            const song: Song = {
+              uid: auth.currentUser.uid,
+              url,
+              display_name: auth.currentUser.displayName || '',
+              original_name: task.snapshot.ref.name,
+              modified_name: task.snapshot.ref.name,
+              genre: '',
+              comment_count: 0
+            }
+            setDoc(doc(songsCollection), song)
+
             this.uploads[itemIndex].variant = 'bg-green-400'
             this.uploads[itemIndex].text_class = 'text-green-400'
             this.uploads[itemIndex].icon = 'fas fa-check'
