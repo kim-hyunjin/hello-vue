@@ -89,7 +89,7 @@ import { songsCollection, auth, commentsCollection } from '@/includes/firebase'
 import type { Song, SongWithID } from '@/models/song'
 import { doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import { ErrorMessage } from 'vee-validate'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useUserStore from '@/stores/user'
 import { storeToRefs } from 'pinia'
@@ -125,6 +125,8 @@ const { userLoggedIn } = storeToRefs(userStore)
  */
 const comments = ref<CommentWithID[]>([])
 const sort = ref<'latest' | 'oldest'>('latest')
+const sortInUrl = route.query.sort
+sort.value = sortInUrl === 'latest' || sortInUrl === 'oldest' ? sortInUrl : 'latest'
 const sortedComments = computed(() =>
   comments.value.slice().sort((a, b) => {
     if (sort.value === 'latest') {
@@ -175,6 +177,18 @@ async function addComment(values: { comment: string }, { resetForm }: { resetFor
 
   resetForm()
 }
+
+watch(sort, (newVal) => {
+  if (newVal === sortInUrl) {
+    return
+  }
+
+  router.push({
+    query: {
+      sort: newVal
+    }
+  })
+})
 </script>
 
 <style scoped></style>
