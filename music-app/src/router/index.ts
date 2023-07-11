@@ -7,6 +7,7 @@ import {
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import ManageView from '@/views/ManageView.vue'
+import SongView from '@/views/SongView.vue'
 import useUserStore from '@/stores/user'
 
 const routes: Readonly<RouteRecordRaw[]> = [
@@ -36,6 +37,11 @@ const routes: Readonly<RouteRecordRaw[]> = [
   {
     path: '/manage',
     redirect: { name: 'manage' } // redirect is better for SEO
+  },
+  {
+    name: 'song',
+    path: '/song/:id',
+    component: SongView
   },
   {
     path: '/:catchAll(.*)*',
