@@ -8,6 +8,7 @@
     <div class="container mx-auto flex items-center">
       <!-- Play/Pause Button -->
       <button
+        @click.prevent="song ? playSong(song) : undefined"
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
       >
@@ -94,6 +95,7 @@ import { useRoute, useRouter } from 'vue-router'
 import useUserStore from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import type { Comment, CommentWithID } from '@/models/comments'
+import { usePlayerStore } from '@/stores/player'
 
 const router = useRouter()
 const route = useRoute()
@@ -200,6 +202,12 @@ watch(sort, (newVal) => {
     }
   })
 })
+
+/**
+ * Play
+ */
+const playerStore = usePlayerStore()
+const { playSong } = playerStore
 </script>
 
 <style scoped></style>
