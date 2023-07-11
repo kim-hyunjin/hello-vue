@@ -8,11 +8,11 @@
     <div class="container mx-auto flex items-center">
       <!-- Play/Pause Button -->
       <button
-        @click.prevent="song ? playSong(song) : undefined"
+        @click.prevent="handlePlayAndPause"
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
       >
-        <i class="fas fa-play"></i>
+        <i class="fas" :class="{ 'fa-play': !playing, 'fa-pause': playing }"></i>
       </button>
       <div class="z-50 text-left ml-8">
         <!-- Song Info -->
@@ -207,7 +207,23 @@ watch(sort, (newVal) => {
  * Play
  */
 const playerStore = usePlayerStore()
-const { playSong } = playerStore
+const { playing, currentSong } = storeToRefs(playerStore)
+const { playSong, pauseSong, toggleAudio } = playerStore
+
+function handlePlayAndPause() {
+  if (playing.value) {
+    pauseSong()
+    return
+  }
+  if (currentSong.value?.doc_id === song.value?.doc_id) {
+    toggleAudio()
+    return
+  }
+
+  if (song.value) {
+    playSong(song.value)
+  }
+}
 </script>
 
 <style scoped></style>
