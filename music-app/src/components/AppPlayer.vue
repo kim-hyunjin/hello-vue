@@ -2,9 +2,9 @@
   <!-- Player -->
   <div class="fixed bottom-0 left-0 bg-white px-4 py-2 w-full" v-if="currentSong">
     <!-- Track Info -->
-    <div class="text-center">
-      <span class="song-title font-bold">{{ currentSong?.modified_name }}</span> by
-      <span class="song-artist">{{ currentSong?.display_name }}</span>
+    <div class="text-center" v-if="currentSong?.modified_name">
+      <span class="song-title font-bold">{{ currentSong.modified_name }}</span> by
+      <span class="song-artist">{{ currentSong.display_name }}</span>
     </div>
     <div class="flex flex-nowrap gap-4 items-center">
       <!-- Play/Pause Button -->
@@ -19,13 +19,16 @@
       <!-- Scrub Container  -->
       <div class="w-full h-2 rounded bg-gray-200 relative cursor-pointer">
         <!-- Player Ball -->
-        <span class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg" style="left: 50%">
+        <span
+          class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg"
+          :style="{ left: playerProgress }"
+        >
           <i class="fas fa-circle"></i>
         </span>
         <!-- Player Progress Bar-->
         <span
           class="block h-2 rounded bg-gradient-to-r from-green-500 to-green-400"
-          style="width: 50%"
+          :style="{ width: playerProgress }"
         ></span>
       </div>
       <!-- Duration -->
@@ -39,7 +42,7 @@ import { usePlayerStore } from '@/stores/player'
 import { storeToRefs } from 'pinia'
 
 const playerStore = usePlayerStore()
-const { playing, seek, duration, currentSong } = storeToRefs(playerStore)
+const { playing, seek, duration, currentSong, playerProgress } = storeToRefs(playerStore)
 const { toggleAudio } = playerStore
 </script>
 

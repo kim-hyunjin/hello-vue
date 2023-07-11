@@ -10,10 +10,15 @@ export const usePlayerStore = defineStore('player', () => {
   const sound = ref<Howl>()
   const seek = ref('00:00')
   const duration = ref('00:00')
+  const playerProgress = ref('0%')
 
   const playing = computed(() => sound.value?.playing())
 
   async function playSong(song: SongWithID) {
+    if (sound.value) {
+      sound.value.unload()
+    }
+
     currentSong.value = song
     sound.value = new Howl({
       src: [song.url],
@@ -28,8 +33,11 @@ export const usePlayerStore = defineStore('player', () => {
   }
 
   function progress() {
-    seek.value = formatTime(sound.value?.seek() ?? 0)
-    duration.value = formatTime(sound.value?.duration() ?? 0)
+    const soundSeek = sound.value?.seek() ?? 0
+    const soundDuration = sound.value?.duration() ?? 0
+    seek.value = formatTime(soundSeek)
+    duration.value = formatTime(soundDuration)
+    playerProgress.value = `${(soundSeek / soundDuration) * 100}%`
 
     if (sound.value?.playing()) {
       requestAnimationFrame(progress)
@@ -54,5 +62,5 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }
 
-  return { playSong, pauseSong, toggleAudio, playing, seek, duration, currentSong }
+  return { playSong, pauseSong, toggleAudio, playing, seek, duration, currentSong, playerProgress }
 })
