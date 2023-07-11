@@ -87,7 +87,7 @@
 <script setup lang="ts">
 import { songsCollection, auth, commentsCollection } from '@/includes/firebase'
 import type { Song, SongWithID } from '@/models/song'
-import { doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { ErrorMessage } from 'vee-validate'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -148,12 +148,15 @@ async function getComments() {
   const q = query(commentsCollection, where('sid', '==', songId))
   const commentSnapshots = await getDocs(q)
 
+  const temp: CommentWithID[] = []
   commentSnapshots.forEach((doc) => {
-    comments.value.push({
+    temp.push({
       ...(doc.data() as Comment),
       doc_id: doc.id
     })
   })
+
+  comments.value = temp
 }
 
 async function addComment(values: { comment: string }, { resetForm }: { resetForm: () => void }) {
@@ -171,6 +174,14 @@ async function addComment(values: { comment: string }, { resetForm }: { resetFor
   }
 
   await setDoc(doc(commentsCollection), comment)
+
+  if (song.value) {
+    song.value.comment_count += 1
+    await updateDoc(doc(songsCollection, songId), { comment_count: song.value.comment_count })
+  }
+
+  getComments()
+
   commentInSubmission.value = false
   commentAlertVariant.value = 'bg-green-500'
   commentAlertMsg.value = 'Comment added!'
