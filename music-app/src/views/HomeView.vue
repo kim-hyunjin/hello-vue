@@ -42,18 +42,69 @@
 <script setup lang="ts">
 import { songsCollection } from '@/includes/firebase'
 import { type SongWithID, type Song } from '@/models/song'
-import { getDocs } from 'firebase/firestore'
-import { ref } from 'vue'
+import {
+  getDocs,
+  query,
+  limit,
+  startAfter,
+  QueryDocumentSnapshot,
+  orderBy,
+  QueryConstraint
+} from 'firebase/firestore'
+import { onBeforeUnmount, ref } from 'vue'
 import SongItem from '@/components/SongItem.vue'
 
 const songs = ref<SongWithID[]>([])
-const snapshots = await getDocs(songsCollection)
-snapshots.forEach((doc) =>
-  songs.value.push({
-    doc_id: doc.id,
-    ...(doc.data() as Song)
-  })
-)
+const maxPerPage = ref(3)
+
+// undefined - 더 이상 가져올 아이템이 없음. null - 아이템 가져오기 전이라 마지막 아이템이 없음.
+const lastDoc = ref<QueryDocumentSnapshot | undefined | null>(null)
+const pendingRequest = ref(false)
+
+getSongs()
+
+window.addEventListener('scroll', handleScroll)
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+function handleScroll() {
+  const { scrollTop, offsetHeight } = document.documentElement
+  const { innerHeight } = window
+  const bottomOfWindow = Math.round(scrollTop) + innerHeight > offsetHeight - 100
+
+  if (bottomOfWindow) {
+    getSongs()
+  }
+}
+
+async function getSongs() {
+  if (pendingRequest.value) {
+    return
+  }
+  if (lastDoc.value === undefined) {
+    return
+  }
+
+  pendingRequest.value = true
+  const queryFilters: QueryConstraint[] = [orderBy('modified_name'), limit(maxPerPage.value)]
+  if (lastDoc.value) {
+    queryFilters.push(startAfter(lastDoc.value))
+  }
+
+  const q = query(songsCollection, ...queryFilters)
+  const snapshots = await getDocs(q)
+
+  lastDoc.value = snapshots.docs[snapshots.docs.length - 1]
+  snapshots.forEach((doc) =>
+    songs.value.push({
+      doc_id: doc.id,
+      ...(doc.data() as Song)
+    })
+  )
+
+  pendingRequest.value = false
+}
 </script>
 
 <style scoped></style>
