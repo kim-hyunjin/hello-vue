@@ -55,10 +55,11 @@
         </vee-form>
         <!-- Sort Comments -->
         <select
+          v-model="sort"
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         >
-          <option value="1">Latest</option>
-          <option value="2">Oldest</option>
+          <option value="latest">Latest</option>
+          <option value="oldest">Oldest</option>
         </select>
       </div>
     </div>
@@ -67,7 +68,7 @@
   <ul class="container mx-auto">
     <li
       class="p-6 bg-gray-50 border border-gray-200"
-      v-for="comment in comments"
+      v-for="comment in sortedComments"
       :key="comment.doc_id"
     >
       <!-- Comment Author -->
@@ -88,7 +89,7 @@ import { songsCollection, auth, commentsCollection } from '@/includes/firebase'
 import type { Song, SongWithID } from '@/models/song'
 import { doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import { ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useUserStore from '@/stores/user'
 import { storeToRefs } from 'pinia'
@@ -123,6 +124,16 @@ const { userLoggedIn } = storeToRefs(userStore)
  * Comment
  */
 const comments = ref<CommentWithID[]>([])
+const sort = ref<'latest' | 'oldest'>('latest')
+const sortedComments = computed(() =>
+  comments.value.slice().sort((a, b) => {
+    if (sort.value === 'latest') {
+      return new Date(b.datePosted).getTime() - new Date(a.datePosted).getTime()
+    } else {
+      return new Date(a.datePosted).getTime() - new Date(b.datePosted).getTime()
+    }
+  })
+)
 const schema = {
   comment: 'required|min:3'
 }
