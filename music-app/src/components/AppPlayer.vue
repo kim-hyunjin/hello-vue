@@ -17,7 +17,10 @@
       <!-- Current Position -->
       <div class="player-currenttime">{{ seek }}</div>
       <!-- Scrub Container  -->
-      <div class="w-full h-2 rounded bg-gray-200 relative cursor-pointer">
+      <div
+        class="w-full h-2 rounded bg-gray-200 relative cursor-pointer"
+        @click.prevent="handleChangeSeek"
+      >
         <!-- Player Ball -->
         <span
           class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg"
@@ -43,7 +46,14 @@ import { storeToRefs } from 'pinia'
 
 const playerStore = usePlayerStore()
 const { playing, seek, duration, currentSong, playerProgress } = storeToRefs(playerStore)
-const { toggleAudio } = playerStore
+const { toggleAudio, updateSeek } = playerStore
+
+function handleChangeSeek(event: MouseEvent) {
+  const { x, width } = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  const clientX = event.clientX - x
+  const percentage = clientX / width
+  updateSeek(percentage)
+}
 </script>
 
 <style scoped></style>

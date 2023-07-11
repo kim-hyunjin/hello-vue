@@ -62,5 +62,23 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }
 
-  return { playSong, pauseSong, toggleAudio, playing, seek, duration, currentSong, playerProgress }
+  async function updateSeek(percentage: number) {
+    if (!sound.value) return
+
+    const seconds = sound.value?.duration() * percentage
+    sound.value.seek(seconds)
+    sound.value.once('seek', progress)
+  }
+
+  return {
+    playSong,
+    pauseSong,
+    toggleAudio,
+    updateSeek,
+    playing,
+    seek,
+    duration,
+    currentSong,
+    playerProgress
+  }
 })
