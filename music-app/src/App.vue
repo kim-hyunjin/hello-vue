@@ -28,8 +28,25 @@ export default defineComponent({
 <template>
   <app-header></app-header>
   <suspense>
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component"></component>
+      </transition>
+    </router-view>
   </suspense>
   <app-player />
   <app-auth></app-auth>
 </template>
+
+<style>
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: all 0.2s linear;
+}
+.fade-leave-to {
+  transition: all 0.2s linear;
+  opacity: 0;
+}
+</style>
