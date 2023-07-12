@@ -28,7 +28,7 @@
       <div class="bg-white rounded border border-gray-200 relative flex flex-col">
         <div
           class="px-6 pt-6 pb-5 font-bold border-b border-gray-200"
-          v-icon.right="'headphones-alt'"
+          v-icon-secondary="{ icon: 'headphones-alt', right: true }"
         >
           <span class="card-title">Songs</span>
         </div>
@@ -56,6 +56,7 @@ import {
 } from 'firebase/firestore'
 import { onBeforeUnmount, ref } from 'vue'
 import SongItem from '@/components/SongItem.vue'
+import vIconSecondary from '@/directives/icon-secondary'
 
 const songs = ref<SongWithID[]>([])
 const maxPerPage = ref(3)
