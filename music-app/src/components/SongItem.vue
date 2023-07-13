@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import type { SongWithID } from '@/models/song'
 
-const props = defineProps<{ song: SongWithID }>()
+defineProps<{ song: SongWithID }>()
 </script>
 
 <style scoped></style>
