@@ -9,6 +9,9 @@ import icon from './directives/icon'
 import App from './App.vue'
 import router from './router'
 import i18n from './includes/i18n'
+import { registerSW } from 'virtual:pwa-register'
+
+registerSW({ immediate: true })
 
 let app: VueApp
 
