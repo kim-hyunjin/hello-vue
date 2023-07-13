@@ -6,7 +6,7 @@
     <div>
       <router-link
         :to="{ name: 'song', params: { id: song.doc_id } }"
-        class="font-bold block text-gray-600"
+        class="font-bold block text-gray-600 song-link"
       >
         {{ song.modified_name }}
       </router-link>
