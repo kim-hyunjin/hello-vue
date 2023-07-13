@@ -49,6 +49,16 @@ import { ref, uploadBytesResumable, type UploadTask, getDownloadURL } from 'fire
 import { addDoc } from 'firebase/firestore'
 import { type Song, type SongWithID } from '@/models/song'
 import type { PropType } from 'vue'
+
+type Upload = {
+  task: UploadTask
+  current_progress: number
+  name: string
+  variant: string
+  icon: string
+  text_class: string
+}
+
 export default {
   name: 'AppUpload',
   props: {
@@ -60,14 +70,7 @@ export default {
   data() {
     return {
       is_dragover: false,
-      uploads: [] as {
-        task: UploadTask
-        current_progress: number
-        name: string
-        variant: string
-        icon: string
-        text_class: string
-      }[]
+      uploads: [] as Upload[]
     }
   },
   methods: {
@@ -87,6 +90,19 @@ export default {
         if (f.type !== 'audio/mpeg') {
           return
         }
+
+        if (!navigator.onLine) {
+          this.uploads.push({
+            task: {},
+            current_progress: 100,
+            name: f.name,
+            variant: 'bg-red-400',
+            icon: 'fas fa-times',
+            text_class: 'text-red-400'
+          } as Upload)
+          return
+        }
+
         const songRef = ref(storage, `songs/${f.name}`)
         const task = uploadBytesResumable(songRef, f)
         const itemIndex =
